@@ -1,13 +1,63 @@
 // import { useState } from 'react'
 import './App.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+import HomePage from './pages/HomePage'
+import AboutUs from "./pages/AboutUs"
+import Contact from "./pages/Contact"
+import DefaultLayout from './pages/DefaultLayout'
+import Blog from './pages/post'
+import PostPage from './pages/PostPage'
+import AddPost from './pages/AddPost'
+
+// import { GlobalContext } from './context/GlobalContext'
+// import { AlertProvider } from './context/AlertContext'
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function App() {
+  const [tagsList, setTagsList] = useState([]);
+  // const [alert, setAlert] = useState({ type: "", message: "" });
+
+  useEffect(() => {
+    getTags();
+  }, []);
+
+  function getTags() {
+    axios.get(apiUrl + "/tags").then((res) => {
+      console.log(res.data);
+      setTagsList(res.data.data);
+    })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        console.log("Finito");
+      });
+  }
+
 
   return (
-    <>
-      
-    </>
+    // <GlobalContext.Provider value={{ tagsList }}>
+    // <AlertProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route Component={DefaultLayout}>
+            <Route path='/' Component={HomePage} />
+            <Route path='/about' Component={AboutUs} />
+            <Route path='/contact' Component={Contact} />
+            <Route path='/posts'>
+              <Route index Component={Blog}></Route>
+              <Route path=':id' Component={PostPage}></Route>
+              <Route path='create' Component={AddPost}></Route>
+            </Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    // </AlertProvider>
+    // </GlobalContext.Provider> 
   )
 }
 
-export default App
+export default App;
