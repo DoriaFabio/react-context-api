@@ -1,8 +1,8 @@
 import { useState } from "react";
-// import { useAlertContext } from "../context/AlertContext";
+import { useAlertContext } from "../context/AlertContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-// import { GlobalContext } from "../context/GlobalContext";
+import { usePostContext } from "../context/PostContext";
 
 const newPost = {
     titolo: "",
@@ -14,8 +14,8 @@ const newPost = {
 const apiUrl = import.meta.env.VITE_API_URL;
 function AddPost() {
     const [formData, setFormData] = useState(newPost);
-    // const { setAlertData } = useAlertContext();
-    // const {tagsList} = useContext(GlobalContext);
+    const { setAlertData } = useAlertContext();
+    const { tagsList } = usePostContext();
     const Navigate = useNavigate();
 
 
@@ -24,32 +24,32 @@ function AddPost() {
         setFormData({ ...formData, [e.target.name]: value });
     }
 
-    // function handleTags(e) {
-    //     setFormData((formData) => {
-    //         let { tags, ...others } = formData;
-    //         if (tags.includes(e.target.value)) {
-    //             tags = tags.filter((val) => val !== e.target.value);
-    //         } else {
-    //             tags = [...tags, e.target.value];
-    //         }
-    //         return {
-    //             tags,
-    //             ...others,
-    //         };
-    //     });
-    // }
+    function handleTags(e) {
+        setFormData((formData) => {
+            let { tags, ...others } = formData;
+            if (tags.includes(e.target.value)) {
+                tags = tags.filter((val) => val !== e.target.value);
+            } else {
+                tags = [...tags, e.target.value];
+            }
+            return {
+                tags,
+                ...others,
+            };
+        });
+    }
 
     function Add(e) {
         e.preventDefault();
         axios.post(apiUrl + "/posts", formData).then((res) => {
             console.log(res.data);
-            // const id = res.data.id;
-            // setAlertData(
-            //     {
-            //         type: "success",
-            //         message: `Il post con id ${id} è stata salvata`
-            //     }
-            // );
+            const id = res.data.id;
+            setAlertData(
+                {
+                    type: "success",
+                    message: `Il post con id ${id} è stata salvata`
+                }
+            );
             Navigate("/posts");
         })
             .catch((error) => {
@@ -108,7 +108,7 @@ function AddPost() {
                         name="contenuto"
                     />
                 </div>
-                {/* <div className="card p-4">
+                <div className="card p-4">
                     {tagsList.map((tag) => (
                         <div className="mb-3 form-check" key={tag.id}>
                             <input
@@ -125,7 +125,7 @@ function AddPost() {
                             </label>
                         </div>
                     ))}
-                </div> */}
+                </div>
                 <button type="submit" className="btn btn-primary">
                     Submit
                 </button>

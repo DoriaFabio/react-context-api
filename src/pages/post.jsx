@@ -1,19 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-// import { useAlertContext } from "../context/AlertContext.jsx";
-import { usePostContext } from "../context/postContext.jsx";
+// import { usePostContext } from "../context/PostContext.jsx";
 import Card from "../components/Card.jsx"
-// import { GlobalContext } from "../context/GlobalContext.jsx";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 function Blog() {
   const [post, setPost] = useState([]);
-  const { setPostData } = usePostContext();
-
-  // const { count } = useContext(GlobalContext);
-
-  // console.log(count);
 
   useEffect(() => {
     console.log("è stato eseguito use effect");
@@ -24,20 +17,6 @@ function Blog() {
     axios.get(`${apiUrl}/posts`).then((res) => {
       console.log(res.data);
       setPost(res.data.data);
-      const id = res.data.data.id;
-      const titolo = res.data.data.titolo;
-      const contenuto = res.data.data.contenuto;
-      const immagine = res.data.data.immagine;
-      usePostContext(
-        {
-          id: `${id}`,
-          titolo: `${titolo}`,
-          contenuto: `${contenuto}`,
-          immagine: `${immagine}`,
-        }
-      )
-
-
     })
       .catch((error) => {
         console.log(error);
@@ -71,10 +50,10 @@ function Blog() {
             <div className="col-12 col-md-6 col-lg-4" key={p.id}>
               <Card
                 data={p}
-                // immagine={p.immagine}
-                // titolo={p.titolo}
-                // contenuto={p.contenuto}
-                // tags={p.tags.join(", ")}
+                //  immagine={p.immagine}
+                //  titolo={p.titolo}
+                //  contenuto={p.contenuto}
+                //  tags={p.tags.join(", ")}
                 onDeletePost={(e) => {
                   deleteItem(e, p.id)
                 }}
