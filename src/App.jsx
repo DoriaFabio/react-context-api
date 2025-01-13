@@ -13,6 +13,7 @@ import AddPost from './pages/AddPost'
 
 // import { GlobalContext } from './context/GlobalContext'
 // import { AlertProvider } from './context/AlertContext'
+import { PostProvider } from './context/postContext'
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -41,6 +42,7 @@ function App() {
   return (
     // <GlobalContext.Provider value={{ tagsList }}>
     // <AlertProvider>
+    <PostProvider>
       <BrowserRouter>
         <Routes>
           <Route Component={DefaultLayout}>
@@ -55,6 +57,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+    </PostProvider>
     // </AlertProvider>
     // </GlobalContext.Provider> 
   )
